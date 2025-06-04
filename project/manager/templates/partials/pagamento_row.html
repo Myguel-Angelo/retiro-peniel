@@ -1,0 +1,6 @@
+<tr>
+    <td>R$ {{ pagamento.valor_pago }}</td>
+    <td>{{ pagamento.get_metodo_pagamento_display }}</td>
+    <td>{{ pagamento.data_pagamento|date:"d/m/Y H:i" }}</td>
+    <td>{{ pagamento.observacao }}</td>
+</tr>

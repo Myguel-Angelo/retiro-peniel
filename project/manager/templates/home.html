@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Peniel - Início</title>
+{% endblock title %}
+
+{% block css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="container">
+    <h1>Bem-vindo, {{ user.username }}</h1>
+    <p>Gerencie as inscrições e pagamentos abaixo.</p>
+
+    <div class="botoes">
+        <button id="btn-nova-inscricao"><i style="margin-right: 0.25rem;" class="fa fa-plus"></i> Nova inscrição</button>
+        <form action="{% url "logout" %}" method="post">
+            {% csrf_token %}
+            <button class="botao-sair" type="submit">Sair</button>
+        </form>
+    </div>
+
+    <div class="pesquisa-wrapper">
+        <label for="pesquisa-nome">Buscar por nome:</label>
+        <input type="text" id="pesquisa-nome" placeholder="Digite um nome...">
+    </div>    
+
+    <div id="modal-formulario" class="modal-overlay">
+        <div class="modal-content" id="conteudo-modal">
+        </div>
+    </div>
+    
+
+    <div id="filtros">
+        <div class="filter-container">
+            <label for="filtro-grupo">Grupo:</label>
+            <select id="filtro-grupo">
+                <option value="">Todos</option>
+                <option value="grupo_a">0 a 9 anos</option>
+                <option value="grupo_b">10 a 12 anos</option>
+                <option value="grupo_c">13 anos ou mais</option>
+            </select>
+        </div>
+
+        <div class="filter-container">
+            <label for="filtro-status">Status:</label>
+            <select id="filtro-status">
+                <option value="">Todos</option>
+                <option value="pendente">Pendente</option>
+                <option value="quitado">Quitado</option>
+            </select>
+        </div>
+
+        <div class="filter-container">
+            <label for="ordenar-por">Ordenar:</label>
+            <select id="ordenar-por">
+                <option value="nome">Nome (A-Z)</option>
+                <option value="data_inscricao">Data de Inscrição</option>
+                <option value="status">Status</option>
+                <option value="grupo">Grupo</option>
+            </select>
+        </div>
+    </div>
+    <!-- Tabela de inscrições -->
+    <div class="tabela-scroll">
+        <table id="tabela-inscricoes">
+            <thead>
+                <tr>
+                    <th>Ação</th>
+                    <th>Nome</th>
+                    <th>Grupo</th>
+                    <th>Status</th>
+                    <th>Data de Inscrição</th>
+                </tr>
+            </thead>
+            <tbody id="lista-inscricoes">
+                {% for inscricao in inscricoes %}
+                    <tr 
+                        data-grupo="{{ inscricao.grupo }}" 
+                        data-status="{{ inscricao.status }}"
+                        data-nome="{{ inscricao.nome|lower }}"
+                        data-data="{{ inscricao.data_inscricao }}"
+                    >
+                        <td data-label="Ação">
+                            <a href="{% url 'detalhes_inscricao' inscricao.id %}" class="btn-detalhes" data-id="{{ inscricao.id }}">Ver</a>
+                        </td>
+                        <td data-label="Nome">{{ inscricao.nome }}</td>
+                        <td data-label="Grupo">{{ inscricao.get_grupo_display }}</td>
+                        <td data-label="Status" class="status-{{ inscricao.status }}">{{ inscricao.get_status_display }}</td>
+                        <td data-label="Data">{{ inscricao.data_inscricao|date:"d/m/Y" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" style="text-align: center; color: #666;">Nenhuma inscrição registrada ainda</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+    <script>
+        document.getElementById('pesquisa-nome').addEventListener('input', function () {
+            const termo = this.value.trim().toLowerCase();
+            const linhas = document.querySelectorAll('#lista-inscricoes tr');
+        
+            linhas.forEach(linha => {
+                const nome = linha.dataset.nome;
+                linha.style.display = nome.includes(termo) ? '' : 'none';
+            });
+        });
+        
+        document.getElementById('btn-nova-inscricao').addEventListener('click', () => {
+            fetch("{% url 'nova_inscricao' %}")
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('conteudo-modal').innerHTML = html;
+                    document.getElementById('modal-formulario').style.display = 'flex';
+                    initFormSubmit();
+                });
+        });
+        
+        function initFormSubmit() {
+            const form = document.getElementById('form-inscricao');
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(form);
+                fetch("{% url 'nova_inscricao' %}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        const novaLinha = data.row_html;
+                        document.getElementById('lista-inscricoes').insertAdjacentHTML('beforeend', novaLinha);
+                        document.getElementById('modal-formulario').style.display = 'none';
+                        location.reload();
+                    }
+                });
+            });
+            document.getElementById('btn-cancelar').addEventListener('click', () => {
+                document.getElementById('modal-formulario').style.display = 'none';
+            });            
+        }
+    </script>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'js/home.js' %}"></script>
+{% endblock js %}

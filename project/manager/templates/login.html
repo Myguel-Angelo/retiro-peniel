@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    {% load static %}
+    <link rel="icon" href="{% static "img/logo.ico" %}">
+    <link rel="stylesheet" href="{% static "css/login.css" %}">
+    <script>
+        function togglePassword(btn) {
+        const input = btn.previousElementSibling;
+        const icon = btn.querySelector("svg");
+      
+        if (input.type === "password") {
+          input.type = "text";
+          icon.setAttribute("data-lucide", "eye-off");
+        } else {
+          input.type = "password";
+          icon.setAttribute("data-lucide", "eye");
+        }
+      
+        lucide.createIcons(); // re-renderiza o ícone atualizado
+      }
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="login-container">
+            <h1>Retiro Peniel 2026</h1>
+
+            {% if form.errors %}
+            <div class="error-mensages">
+                <ul>
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <form method="post" class="form-container">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}">Usuário</label>
+                    {{ form.username }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.password.id_for_label }}">Senha</label>
+                    {{ form.password }}
+                    <button type="button" class="toggle-password" onclick="togglePassword(this)">
+                        <i data-lucide="eye" class="eye-icon"></i>
+                    </button>
+                </div>
+                <button class="button-submit" type="submit">Entrar</button>
+            </form>
+        </div>
+
+        <div class="image-container">
+            <img src="{% static 'img/login-image.svg' %}" alt="Imagem ilustrativa do Retiro">
+        </div>
+    </div>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

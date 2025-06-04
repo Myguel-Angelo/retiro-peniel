@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>Detalhes da Inscrição</title>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/details.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Detalhes da Inscrição: {{ inscricao.nome }}</h1>
+    <div class="btn-container">
+        <a class="btn-voltar" href="{% url 'home' %}">&larr; Voltar</a>
+        <form action="{% url 'inscricao_deletar' inscricao.pk %}" method="post" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir esta inscrição?');">
+            {% csrf_token %}
+            <button type="submit" class="btn-deletar">
+                <i class="fa fa-trash"></i> Deletar inscrição
+            </button>
+        </form>
+    </div>
+
+    <div class="inscricao-info" style="margin-top: 2rem;">
+        <p><strong>Nome:</strong> {{ inscricao.nome }}</p>
+        <p><strong>Telefone:</strong> {{ inscricao.telefone }}</p>
+        <p><strong>Idade:</strong> {{ inscricao.idade }}</p>
+        <p><strong>Grupo:</strong> {{ inscricao.get_grupo_display }}</p>
+        <p><strong>Status:</strong> <span class="status-{{ inscricao.status }}">{{ inscricao.get_status_display }}</span></p>
+        <p><strong>Valor Restante:</strong> R$ {{ inscricao.valor_pagar }}</p>
+        <p><strong>Criador:</strong> {{ inscricao.criador.username }}</p>
+        <p><strong>Data da Inscrição:</strong> {{ inscricao.data_inscricao|date:"d/m/Y" }}</p>
+    </div>
+    {% if inscricao.grupo != 'grupo_a' %}
+    <h2>Pagamentos</h2>
+        {% if pagamentos %}
+        <div class="tabela-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Valor Pago</th>
+                        <th>Método</th>
+                        <th>Data do Pagamento</th>
+                        <th>Observação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pagamento in pagamentos %}
+                        {% include "partials/pagamento_row.html" %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p style="color: #666;">Nenhum pagamento registrado ainda.</p>
+        {% endif %}
+    {% endif %}
+
+    <br>
+    {% if inscricao.grupo != 'grupo_a' %}
+    <button id="btn-registrar-pagamento"><i class="fa fa-plus"></i> Registrar Pagamento</button>
+    <div id="modal-pagamento" class="modal-overlay">
+        <div class="modal-content" id="conteudo-modal-pagamento">
+            <!-- Formulário AJAX aparecerá aqui -->
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+<script>
+    document.getElementById('btn-registrar-pagamento').addEventListener('click', () => {
+        const inscricaoId = "{{ inscricao.id }}";
+        fetch(`{% url 'registrar_pagamento' inscricao_id=inscricao.id %}`)
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('conteudo-modal-pagamento').innerHTML = html;
+                document.getElementById('modal-pagamento').style.display = 'flex';
+                initPagamentoSubmit();
+            });
+    });
+    
+    function initPagamentoSubmit() {
+        const form = document.getElementById('form-pagamento');
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const inscricaoId = "{{ inscricao.id }}";
+    
+            fetch(`/inscricao/${inscricaoId}/registrar-pagamento/`, {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    document.querySelector('tbody').insertAdjacentHTML('afterbegin', data.row_html);
+                    document.getElementById('modal-pagamento').style.display = 'none';
+                    setTimeout(() => {
+                        location.reload();
+                    }, 200);
+                }
+            });
+        });
+    
+        document.getElementById('btn-cancelar-pagamento').addEventListener('click', () => {
+            document.getElementById('modal-pagamento').style.display = 'none';
+        });
+    }
+</script>
+{% endblock %}

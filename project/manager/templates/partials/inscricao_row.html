@@ -1,0 +1,11 @@
+<tr 
+    data-grupo="{{ inscricao.grupo }}" 
+    data-status="{{ inscricao.status }}"
+    data-nome="{{ inscricao.nome|lower }}"
+    data-data="{{ inscricao.data_inscricao }}"
+>
+    <td>{{ inscricao.nome }}</td>
+    <td>{{ inscricao.get_grupo_display }}</td>
+    <td class="status-{{ inscricao.status }}">{{ inscricao.get_status_display }}</td>
+    <td>{{ inscricao.data_inscricao|date:"d/m/Y" }}</td>
+</tr>

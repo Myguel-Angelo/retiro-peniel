@@ -39,7 +39,7 @@ class InscricaoDetailView(LoginRequiredMixin, DetailView):
 
 class PagamentoCreateView(LoginRequiredMixin, CreateView):
     model = Pagamento
-    fields = ['valor_pago', 'metodo_pagamento', 'observacao', 'data_pagamento']
+    fields = ['valor_pago', 'metodo_pagamento', 'observacao']
     template_name = 'pagamento_form.html'
     success_url = reverse_lazy('home')
 

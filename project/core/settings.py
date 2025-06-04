@@ -32,6 +32,10 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/auth/login/'
 LOGIN_URL = '/auth/login/'
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://retiro-peniel.onrender.com',
+]
+
 
 # Application definition
 

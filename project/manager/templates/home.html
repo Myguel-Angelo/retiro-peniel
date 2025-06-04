@@ -16,6 +16,7 @@
 
     <div class="botoes">
         <button id="btn-nova-inscricao"><i style="margin-right: 0.25rem;" class="fa fa-plus"></i> Nova inscrição</button>
+        <a href="{% url 'relatorio' %}" class="btn-relatorio">Relatório</a>
         <form action="{% url "logout" %}" method="post">
             {% csrf_token %}
             <button class="botao-sair" type="submit">Sair</button>

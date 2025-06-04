@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.conf.urls.static import static
-from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
-from .views import InscricoesView, InscricaoCreateView, InscricaoDetailView, PagamentoCreateView, InscricaoDeleteView
+from django.urls import path
+
+from .views import (InscricaoCreateView, InscricaoDeleteView, InscricaoDetailView, InscricoesView, PagamentoCreateView, RelatorioView)
 
 urlpatterns = [
     path('', InscricoesView.as_view(), name='home'),
@@ -12,6 +13,7 @@ urlpatterns = [
     path('inscricao/<int:pk>/', InscricaoDetailView.as_view(), name='detalhes_inscricao'),
     path('inscricao/<int:inscricao_id>/registrar-pagamento/', PagamentoCreateView.as_view(), name='registrar_pagamento'),
     path('inscricao/<int:pk>/deletar/', InscricaoDeleteView.as_view(), name='inscricao_deletar'),
+    path('relatorio/', RelatorioView.as_view(), name='relatorio'),
 ]
 
 if settings.DEBUG:

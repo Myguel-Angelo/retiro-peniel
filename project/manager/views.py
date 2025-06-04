@@ -1,9 +1,11 @@
-from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, CreateView, DetailView, View
+from django.db.models import Q, Sum
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-from django.http import JsonResponse
+from django.views.generic import (CreateView, DetailView, ListView, TemplateView, View)
+
 from .models import Inscricao, Pagamento
 
 # Create your views here.
@@ -69,4 +71,23 @@ class InscricaoDeleteView(LoginRequiredMixin, View):
         inscricao = get_object_or_404(Inscricao, pk=pk)
         inscricao.delete()
         return redirect('home')
-    
+
+class RelatorioView(LoginRequiredMixin, TemplateView):
+    template_name = 'relatorio.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_inscritos'] = Inscricao.objects.count()
+
+        context['grupo_a'] = Inscricao.objects.filter(grupo='grupo_a').count()
+        context['grupo_b'] = Inscricao.objects.filter(grupo='grupo_b').count()
+        context['grupo_c'] = Inscricao.objects.filter(grupo='grupo_c').count()
+
+        context['status_quitado'] = Inscricao.objects.filter(status='quitado').count()
+        context['status_pendente'] = Inscricao.objects.filter(status='pendente').count()
+
+        context['valor_total'] = Inscricao.objects.aggregate(
+            total=Sum('valor_pagar', filter=Q(status='quitado'))
+        )['total'] or 0
+
+        return context

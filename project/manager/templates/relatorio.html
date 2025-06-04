@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>Relatório Geral</title>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/relatorio.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Relatório Geral</h1>
+    <a class="btn-voltar" href="{% url 'home' %}">&larr; Voltar</a>
+
+    <div class="secao">
+        <h2>Principais</h2>
+        <ul>
+            <li><strong>Total de inscrições:</strong> {{ total_inscritos }}</li>
+            <li><strong>Total arrecadado:</strong> R$ {{ valor_total|floatformat:2 }}</li>
+        </ul>
+    </div>
+
+    <div class="secao">
+        <h2>Situação das inscrições</h2>
+        <ul>
+            <li class="verde"><strong>Quitadas:</strong> <span class="verde">{{ status_quitado }}</span></li>
+            <li class="amarelo"><strong>Pendentes:</strong> <span class="amarelo">{{ status_pendente }}</span></li>
+        </ul>
+    </div>
+
+    <div class="secao">
+        <h2>Quantidade por grupo</h2>
+        <ul>
+            <li><strong>0–9 anos:</strong> {{ grupo_a }}</li>
+            <li><strong>10–12 anos:</strong> {{ grupo_b }}</li>
+            <li><strong>13 anos ou mais:</strong> {{ grupo_c }}</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

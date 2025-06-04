@@ -87,7 +87,7 @@
             const formData = new FormData(form);
             const inscricaoId = "{{ inscricao.id }}";
     
-            fetch("{% url 'registrar_pagamento' inscricao_id=inscricao.id %}", {
+            fetch(`/inscricao/${inscricaoId}/registrar-pagamento/`, {
                 method: 'POST',
                 body: formData,
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }

@@ -86,8 +86,5 @@ class RelatorioView(LoginRequiredMixin, TemplateView):
         context['status_quitado'] = Inscricao.objects.filter(status='quitado').count()
         context['status_pendente'] = Inscricao.objects.filter(status='pendente').count()
 
-        context['valor_total'] = Inscricao.objects.aggregate(
-            total=Sum('valor_pagar', filter=Q(status='quitado'))
-        )['total'] or 0
-
+        context['valor_total'] = Pagamento.objects.aggregate(total=Sum('valor_pago'))['total'] or 0
         return context

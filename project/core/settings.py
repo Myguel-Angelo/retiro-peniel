@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-yn01e-4)bl1@y(-r4d568o-dgk($x-clu6p6p4!*dbi$3xr=_5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', 'retiro-peniel.onrender.com']
 
@@ -84,8 +84,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'retiro_peniel',
+        'USER': 'peniel',
+        'PASSWORD': 'NUme4sfogeZ8beTD9SrREGZ55qynwarw',
+        'HOST': 'd105anali9vc73dgd7sg-a.oregon-postgres.render.com',
+        'PORT': '5432',
     }
 }
 

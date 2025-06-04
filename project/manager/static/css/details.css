@@ -1,0 +1,199 @@
+/* :root {
+    --main-color: #1285af;
+    --dark-color: #2c2c2c;
+    --white-color1: #fafafa;
+    --white-color2: #e1e1e1;
+    --success-color: #28a745;
+    --pending-color: #ffc107;
+} */
+
+h1 {
+    font-size: 2.6rem;
+    color: var(--main-color);
+    margin-bottom: 1rem;
+}
+
+.btn-voltar {
+    text-decoration: none;
+    background-color: var(--main-color);
+    color: var(--white-color1);
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.6rem;
+    text-align: center;
+    font-size: 1.4rem;
+    margin-right: 0.3rem;
+}
+
+.btn-deletar {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    background-color: #af1212;
+    color: white;
+    text-decoration: none;
+    border-radius: 0.6rem;
+    font-size: 1.4rem;
+    transition: background-color 0.2s ease;
+}
+
+.btn-deletar i {
+    margin-right: 0.4rem;
+}
+
+.btn-deletar:hover {
+    background-color: #900f0f;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-top: 2rem;
+    color: var(--dark-color);
+}
+
+.inscricao-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.container p {
+    font-size: 1.5rem;
+    color: var(--dark-color);
+    margin-bottom: 0.8rem;
+}
+
+.status-quitado {
+    color: var(--success-color);
+    font-weight: bold;
+}
+
+.status-pendente {
+    color: var(--pending-color);
+    font-weight: bold;
+}
+
+/* Tabela de pagamentos */
+table {
+    width: 100%;
+    min-width: 75rem;
+    border-collapse: collapse;
+    background-color: var(--white-color1);
+    border-radius: 0.6rem;
+    overflow: hidden;
+    box-shadow: 0 0 0.5rem rgba(0,0,0,0.05);
+    font-size: 1.4rem;
+}
+
+th {
+    background-color: var(--main-color);
+    color: white;
+    padding: 1rem;
+    text-align: left;
+}
+
+td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--white-color2);
+    color: var(--dark-color);
+    background-color: white;
+    vertical-align: top;
+}
+
+tbody tr:nth-child(even) {
+    background-color: var(--white-color2);
+}
+
+/* Botões */
+button {
+    margin-top: 2rem;
+    padding: 0.8rem 1.6rem;
+    font-size: 1.4rem;
+    border: none;
+    border-radius: 0.6rem;
+    cursor: pointer;
+    background-color: var(--main-color);
+    color: white;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0e6d91;
+}
+
+/* Modal AJAX */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-content {
+    background-color: var(--white-color1);
+    padding: 2rem;
+    border-radius: 1rem;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 0 1rem rgba(0,0,0,0.2);
+}
+
+/* Formulário no modal */
+form {
+    font-size: 1.4rem;
+}
+
+form p {
+    margin-bottom: 1.2rem;
+}
+
+form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--dark-color);
+}
+
+form input,
+form select,
+form textarea {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1.4rem;
+    border: 1px solid #ccc;
+    border-radius: 0.6rem;
+    background-color: #fff;
+}
+
+form textarea {
+    resize: none;
+    height: 15rem;
+}
+
+/* Ações do formulário */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-salvar {
+    background-color: var(--main-color);
+    color: white;
+}
+
+.btn-salvar:hover {
+    background-color: #0f6c90;
+}
+
+.btn-cancelar {
+    background-color: #ddd;
+    color: var(--dark-color);
+}
+
+.btn-cancelar:hover {
+    background-color: #bbb;
+}
